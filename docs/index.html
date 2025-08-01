@@ -1,5 +1,6 @@
 <!doctype html>
 <html lang="en">
+
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -13,26 +14,22 @@
             --card-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
             --card-hover: 0 8px 25px rgba(67, 97, 238, 0.15);
         }
+
         body {
             background: #f8f9fc;
             color: #333;
-            padding-top: 120px; /* Увеличенный отступ для фиксированной шапки */
+            padding-top: 2rem;
             min-height: 100vh;
         }
+
         .header {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            z-index: 1000;
             background: var(--primary-gradient);
             color: white;
-            padding: 1.5rem 0;
+            padding: 2rem 0;
+            margin-bottom: 2rem;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
         }
-        .content-wrapper {
-            padding-top: 0; /* Уже не нужно, так как отступ есть у body */
-        }
+
         .schema-card {
             border-radius: 12px;
             border: 1px solid #e0e6ef;
@@ -40,44 +37,51 @@
             transition: all 0.3s ease;
             height: 100%;
             overflow: hidden;
-            margin-top: 50%;
         }
+
         .schema-card:hover {
             transform: translateY(-5px);
             box-shadow: var(--card-hover);
             border-color: #dbe4ff;
         }
+
         .schema-card .card-body {
             padding: 1.5rem;
             display: flex;
             flex-direction: column;
         }
+
         .tag-container {
             display: flex;
             flex-wrap: wrap;
             gap: 0.5rem;
             margin: 0.5rem 0;
         }
+
         .feature-list {
             list-style: none;
             padding: 0;
             margin: 0.8rem 0;
         }
+
         .feature-list li {
             display: flex;
             align-items: center;
             margin-bottom: 0.5rem;
             font-size: 0.9rem;
         }
+
         .feature-list i {
             color: #4361ee;
             margin-right: 0.5rem;
             font-size: 0.8rem;
         }
+
         .search-container {
             max-width: 800px;
             margin: 0 auto 2rem;
         }
+
         .search-input {
             border-radius: 50px;
             padding: 12px 20px;
@@ -85,52 +89,63 @@
             font-size: 1.1rem;
             box-shadow: var(--card-shadow);
         }
+
         .search-input:focus {
             box-shadow: 0 0 0 0.25rem rgba(67, 97, 238, 0.25);
             border-color: #4361ee;
         }
+
         .no-results {
             text-align: center;
             padding: 3rem 0;
             color: #6c757d;
         }
+
         .no-results i {
             font-size: 4rem;
             margin-bottom: 1rem;
             color: #e9ecef;
         }
+
         .modal-content {
             border-radius: 16px;
             overflow: hidden;
         }
+
         .modal-header {
             background: linear-gradient(135deg, #f8f9fc, #e9ecef);
             border-bottom: 1px solid #dee2e6;
         }
+
         .badge-custom {
             background: linear-gradient(135deg, #dbe4ff, #eef2ff);
             color: #3a0ca3;
             font-weight: 500;
             padding: 0.4rem 0.8rem;
         }
+
         .btn-primary {
             background: var(--primary-gradient);
             border: none;
             transition: all 0.2s;
         }
+
         .btn-primary:hover {
             transform: translateY(-1px);
             box-shadow: 0 4px 12px rgba(67, 97, 238, 0.3);
         }
+
         .btn-outline-primary {
             border: 2px solid #4361ee;
             color: #4361ee;
             transition: all 0.2s;
         }
+
         .btn-outline-primary:hover {
             background: #4361ee;
             color: white;
         }
+
         .stats-bar {
             background: #f8f9fc;
             border-radius: 8px;
@@ -138,31 +153,37 @@
             margin: 0.5rem 0;
             font-size: 0.85rem;
         }
+
         .stat-item {
             display: flex;
             flex-direction: column;
             align-items: center;
             padding: 0.5rem;
         }
+
         .stat-value {
             font-weight: bold;
             font-size: 1.2rem;
             color: #4361ee;
         }
+
         .stat-label {
             color: #6c757d;
             font-size: 0.8rem;
         }
+
         .schema-code-container {
             border-radius: 8px;
             overflow: hidden;
             border: 1px solid #e0e6ef;
             box-shadow: var(--card-shadow);
         }
+
         .schema-code-container pre {
             margin: 0;
             border-radius: 0;
         }
+
         .loading-spinner {
             display: inline-block;
             width: 20px;
@@ -173,11 +194,13 @@
             animation: spin 1s linear infinite;
             margin-right: 8px;
         }
+
         @keyframes spin {
             to {
                 transform: rotate(360deg);
             }
         }
+
         .action-buttons {
             display: flex;
             gap: 10px;
@@ -185,6 +208,7 @@
         }
     </style>
 </head>
+
 <body>
     <div class="header">
         <div class="container">
@@ -204,31 +228,35 @@
                     </div>
                 </div>
             </div>
-            <div class="search-container mt-2 mt-md-3">
-                <div class="input-group">
-                    <span class="input-group-text bg-white border-end-0">
-                        <i class="bi bi-search text-muted"></i>
-                    </span>
-                    <input type="text" class="form-control search-input border-start-0" id="searchInput"
-                        placeholder="Поиск по названию, тегам или описанию...">
-                </div>
-                <div class="mt-2 text-end">
-                    <small class="text-light">Найдено <span id="results-count">0</span> схем</small>
-                </div>
-            </div>
         </div>
     </div>
 
-    <div class="container content-wrapper">
+    <div class="container">
+        <div class="search-container">
+            <div class="input-group">
+                <span class="input-group-text bg-white border-end-0">
+                    <i class="bi bi-search text-muted"></i>
+                </span>
+                <input type="text" class="form-control search-input border-start-0" id="searchInput"
+                    placeholder="Поиск по названию, тегам или описанию...">
+            </div>
+            <div class="mt-2 text-end">
+                <small class="text-muted">Найдено <span id="results-count">0</span> схем</small>
+            </div>
+        </div>
+
         <div id="loading" class="text-center py-5">
             <div class="loading-spinner"></div>
             <p class="mt-2">Загрузка схем баз данных...</p>
         </div>
+
         <div id="error-message" class="alert alert-danger d-none" role="alert">
             <i class="bi bi-exclamation-circle me-1"></i> Не удалось загрузить файл schemas.json. Проверьте, доступен ли
             файл и правильно ли указан путь.
         </div>
+
         <div class="row" id="schemaContainer"></div>
+
         <div id="no-results" class="no-results d-none">
             <i class="bi bi-search"></i>
             <h4>Схемы не найдены</h4>
@@ -275,14 +303,17 @@
                             </div>
                         </div>
                     </div>
+
                     <h6 class="mb-2">Теги</h6>
                     <div class="tag-container mb-3" id="modal-tags">
                         <!-- Tags will be inserted here -->
                     </div>
+
                     <h6 class="mb-2">Особенности</h6>
                     <ul class="feature-list" id="modal-features">
                         <!-- Features will be inserted here -->
                     </ul>
+
                     <h6 class="mb-2 mt-4">SQL-код схемы</h6>
                     <div class="schema-code-container">
                         <pre><code class="sql" id="schemaCode">Загрузка SQL-кода...</code></pre>
@@ -304,6 +335,7 @@
             </div>
         </div>
     </div>
+
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
     <script>
@@ -319,6 +351,7 @@
                     { begin: /`/, end: /`/, illegal: /\n/ }
                 ]
             };
+
             const NUMBER = {
                 className: 'number',
                 variants: [
@@ -327,6 +360,7 @@
                 ],
                 relevance: 0
             };
+
             const KEYWORDS = {
                 $pattern: /[A-Za-z_][A-Za-z0-9_\.]*/,
                 keyword:
@@ -347,6 +381,7 @@
                 literal:
                     'true false null'
             };
+
             return {
                 name: 'SQL',
                 case_insensitive: true,
@@ -361,6 +396,7 @@
                 ]
             };
         });
+
         document.addEventListener('DOMContentLoaded', function () {
             const container = document.getElementById("schemaContainer");
             const searchInput = document.getElementById("searchInput");
@@ -373,7 +409,9 @@
             const loading = document.getElementById("loading");
             const errorMessage = document.getElementById("error-message");
             const noResults = document.getElementById("no-results");
+
             let allSchemas = [];
+
             // Загружаем данные из schemas.json
             async function loadSchemas() {
                 try {
@@ -391,18 +429,23 @@
                     errorMessage.classList.remove('d-none');
                 }
             }
+
             function renderSchemas(schemasList) {
                 container.innerHTML = "";
+
                 if (schemasList.length === 0) {
                     noResults.classList.remove('d-none');
                     resultsCount.textContent = '0';
                     return;
                 }
+
                 noResults.classList.add('d-none');
                 resultsCount.textContent = schemasList.length;
+
                 schemasList.forEach(schema => {
                     const col = document.createElement("div");
                     col.className = "col-md-6 col-lg-4 mb-4";
+
                     // Генерируем статистику по схеме
                     const tablesCount = schema.features?.tables?.count || 0;
                     const relationshipsCount = schema.features?.relationships?.count || 0;
@@ -410,6 +453,7 @@
                     const sizeText = size > 1024
                         ? (size / 1024).toFixed(1) + ' MB'
                         : size.toFixed(1) + ' KB';
+
                     // Форматируем дату
                     const date = new Date(schema.updated || schema.created || Date.now());
                     const formattedDate = date.toLocaleDateString('ru-RU', {
@@ -417,18 +461,21 @@
                         month: 'short',
                         day: 'numeric'
                     });
+
                     // Генерируем теги
                     const tagsHtml = schema.tags && schema.tags.length > 0
                         ? schema.tags.map(tag => `
                 <span class="badge badge-custom me-1 mb-1">${tag}</span>
               `).join('')
                         : `<span class="text-muted fst-italic">Нет тегов</span>`;
+
                     // Генерируем особенности
                     const features = [];
                     if (schema.features?.normalization) features.push(`Нормализация: ${schema.features.normalization}`);
                     if (schema.features?.indexes) features.push(`Индексы: ${schema.features.indexes}`);
                     if (schema.features?.constraints) features.push(`Ограничения: ${schema.features.constraints}`);
                     if (schema.features?.relationships?.type) features.push(`Связи: ${schema.features.relationships.type}`);
+
                     col.innerHTML = `
               <div class="card schema-card h-100">
                 <div class="card-body">
@@ -437,6 +484,7 @@
                     <span class="badge bg-light text-dark border">v${schema.version}</span>
                   </div>
                   <p class="card-text text-muted mb-3" style="min-height: 60px;">${schema.description || 'Нет описания'}</p>
+                  
                   <div class="stats-bar mb-3">
                     <div class="row g-2">
                       <div class="col text-center">
@@ -453,9 +501,11 @@
                       </div>
                     </div>
                   </div>
+                  
                   <div class="tag-container">
                     ${tagsHtml}
                   </div>
+                  
                   <div class="mt-auto">
                     <button class="btn btn-primary w-100" data-path="${schema.path}" data-name="${schema.name}">
                       <i class="bi bi-eye me-2"></i>Просмотреть схему
@@ -466,16 +516,20 @@
                   <i class="bi bi-calendar-event me-1"></i>${formattedDate}
                 </div>
               </div>`;
+
                     const viewBtn = col.querySelector("button");
                     viewBtn.addEventListener("click", () => openSchemaModal(schema));
+
                     container.appendChild(col);
                 });
             }
+
             function openSchemaModal(schema) {
                 // Устанавливаем основные данные
                 document.getElementById("schemaModalLabel").textContent = schema.name;
                 document.getElementById("modal-version").textContent = schema.version;
                 document.getElementById("modal-description").textContent = schema.description || 'Нет описания';
+
                 // Форматируем дату
                 const date = new Date(schema.updated || schema.created || Date.now());
                 document.getElementById("modal-updated").textContent = date.toLocaleDateString('ru-RU', {
@@ -485,6 +539,7 @@
                     hour: '2-digit',
                     minute: '2-digit'
                 });
+
                 // Заполняем теги
                 const tagsContainer = document.getElementById("modal-tags");
                 tagsContainer.innerHTML = '';
@@ -498,11 +553,13 @@
                 } else {
                     tagsContainer.innerHTML = '<span class="text-muted fst-italic">Нет тегов</span>';
                 }
+
                 // Заполняем особенности
                 const featuresContainer = document.getElementById("modal-features");
                 featuresContainer.innerHTML = '';
                 if (schema.features) {
                     const featuresList = [];
+
                     if (schema.features.normalization) {
                         featuresList.push({
                             icon: 'bi bi-shuffle',
@@ -537,12 +594,14 @@
                             text: `Размер: ${sizeText}`
                         });
                     }
+
                     featuresList.forEach(feature => {
                         const li = document.createElement('li');
                         li.innerHTML = `<i class="${feature.icon}"></i> ${feature.text}`;
                         featuresContainer.appendChild(li);
                     });
                 }
+
                 // Устанавливаем статистику
                 document.getElementById("modal-tables").textContent = schema.features?.tables?.count || 0;
                 document.getElementById("modal-relationships").textContent = schema.features?.relationships?.count || 0;
@@ -550,12 +609,23 @@
                 document.getElementById("modal-size").textContent = size > 1024
                     ? (size / 1024).toFixed(1) + ' MB'
                     : size.toFixed(1) + ' KB';
+
                 // Загружаем SQL-код
                 schemaCode.textContent = 'Загрузка SQL-кода...';
-                hljs.highlightElement(schemaCode);
-                
-                // Загружаем SQL-код
-                fetch(schema.path)
+
+                // Получаем имя репозитория из URL
+                const repoName = window.location.pathname.split('/')[1] || '';
+                const userName = window.location.hostname.split('.')[0];
+
+                // Формируем URL для GitHub API
+                const fileName = schema.path.split('/').pop();
+                const apiUrl = `https://api.github.com/repos/${userName}/${repoName}/contents/LearningManagementSystems/${fileName}`;
+
+                fetch(apiUrl, {
+                    headers: {
+                        'Accept': 'application/vnd.github.v3.raw'
+                    }
+                })
                     .then(response => {
                         if (!response.ok) throw new Error('Network response was not ok');
                         return response.text();
@@ -563,24 +633,31 @@
                     .then(text => {
                         schemaCode.textContent = text;
                         hljs.highlightElement(schemaCode);
-                        
-                        // Настраиваем кнопки
-                        downloadButton.href = schema.path;
+
+                        // Для скачивания используем прямой URL к файлу
+                        const rawUrl = `https://raw.githubusercontent.com/${userName}/${repoName}/main/LearningManagementSystems/${fileName}`;
+                        downloadButton.href = rawUrl;
                         downloadButton.download = `${schema.name.replace(/\s+/g, '_')}.sql`;
                     })
                     .catch(error => {
                         console.error('Error loading SQL file:', error);
-                        schemaCode.textContent = 'Не удалось загрузить SQL-код. Проверьте доступность файла.';
+                        schemaCode.textContent = 'Не удалось загрузить SQL-код через API GitHub.\n\n' +
+                            'Ошибка: ' + error.message + '\n\n' +
+                            'Попробуйте проверить настройки репозитория.';
                     });
+
                 schemaModal.show();
             }
+
             // Поиск по схемам
             searchInput.addEventListener("input", () => {
                 const query = searchInput.value.toLowerCase().trim();
+
                 if (query === '') {
                     renderSchemas(allSchemas);
                     return;
                 }
+
                 const filtered = allSchemas.filter(s =>
                     s.name.toLowerCase().includes(query) ||
                     (s.description && s.description.toLowerCase().includes(query)) ||
@@ -588,8 +665,10 @@
                     (s.features && s.features.keywords &&
                         s.features.keywords.some(keyword => keyword.toLowerCase().includes(query)))
                 );
+
                 renderSchemas(filtered);
             });
+
             // Копирование в буфер обмена
             copyButton.addEventListener("click", async () => {
                 try {
@@ -601,9 +680,11 @@
                     alert("Не удалось скопировать текст");
                 }
             });
+
             // Загружаем схемы
             loadSchemas();
         });
     </script>
 </body>
+
 </html>
