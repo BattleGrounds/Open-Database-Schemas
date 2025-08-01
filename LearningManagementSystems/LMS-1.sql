@@ -1,4 +1,3 @@
--- 1. Основные справочники без внешних ключей
 CREATE OR REPLACE TABLE `version` (
     `version_id` SMALLINT  NOT NULL AUTO_INCREMENT PRIMARY KEY,
     `created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -52,8 +51,6 @@ CREATE OR REPLACE TABLE `skills` (
     `name` VARCHAR(50) NOT NULL COMMENT 'Название навыка',
     UNIQUE KEY `uq_skill_name` (`name`)
 ) ENGINE=InnoDB AUTO_INCREMENT=100 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_uca1400_ai_ci;
-
--- 2. Таблицы, которые ссылаются на справочники, но не зависят от друг друга
 
 CREATE OR REPLACE TABLE `courses` (
     `course_id` SMALLINT  NOT NULL AUTO_INCREMENT PRIMARY KEY COMMENT 'Идентификатор курса',
@@ -110,8 +107,6 @@ CREATE OR REPLACE TABLE `materials` (
     FULLTEXT KEY `ft_content` (`content`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_uca1400_ai_ci ROW_FORMAT=COMPRESSED;
 
--- 3. Таблицы вопросов и ответов
-
 CREATE OR REPLACE TABLE `questions` (
     `question_id` SMALLINT  NOT NULL AUTO_INCREMENT PRIMARY KEY COMMENT 'Идентификатор вопроса',
     `title` VARCHAR(100) NOT NULL COMMENT 'Краткое название',
@@ -135,8 +130,6 @@ CREATE OR REPLACE TABLE `questions_answers` (
     FOREIGN KEY (`answer_id`) REFERENCES `answers` (`answer_id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_uca1400_ai_ci;
 
--- 4. Таблицы для квизов
-
 CREATE OR REPLACE TABLE `quiz_questions` (
     `quiz_id` SMALLINT  NOT NULL,
     `question_id` SMALLINT  NOT NULL,
@@ -145,8 +138,6 @@ CREATE OR REPLACE TABLE `quiz_questions` (
     FOREIGN KEY (`quiz_id`) REFERENCES `quizzes` (`quiz_id`) ON DELETE CASCADE,
     FOREIGN KEY (`question_id`) REFERENCES `questions` (`question_id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_uca1400_ai_ci;
-
--- 5. Таблицы взаимодействия студентов
 
 CREATE OR REPLACE TABLE `student_quiz` (
     `id` SMALLINT  NOT NULL AUTO_INCREMENT PRIMARY KEY,
@@ -198,8 +189,6 @@ CREATE OR REPLACE TABLE `grades` (
     CONSTRAINT `chk_grade` CHECK (`grade` >= 2 AND `grade` <= 5)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_uca1400_ai_ci;
 
--- 6. Навыки студентов и курсов
-
 CREATE OR REPLACE TABLE `studentskills` (
     `student_id` SMALLINT  NOT NULL,
     `skill_id` SMALLINT  NOT NULL,
@@ -224,8 +213,6 @@ CREATE OR REPLACE TABLE `course_prerequisites` (
     FOREIGN KEY (`skill_id`) REFERENCES `skills` (`skill_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_uca1400_ai_ci;
 
-
--- 0. Справочники (замена ENUM)
 CREATE TABLE learning_styles (
     style_code VARCHAR(20) PRIMARY KEY COMMENT 'Код стиля обучения: theory, practice, mixed',
     description VARCHAR(100) COMMENT 'Описание стиля обучения'
@@ -236,7 +223,6 @@ CREATE TABLE content_types (
     description VARCHAR(100) COMMENT 'Описание типа контента'
 ) ENGINE=InnoDB COMMENT='Справочник типов учебного контента';
 
--- 1. Профиль студента
 CREATE TABLE student_profile (
     student_id SMALLINT PRIMARY KEY COMMENT 'ID пользователя (студента)',
     career_goal VARCHAR(100) COMMENT 'Цель обучения или карьеры',
@@ -250,7 +236,6 @@ CREATE TABLE student_profile (
     FOREIGN KEY (preferred_content_type) REFERENCES content_types(type_code)
 ) ENGINE=InnoDB COMMENT='Профиль студента для персонализации обучения';
 
--- 2. Микро-контент (5НФ)
 CREATE TABLE content_unit (
     unit_id SMALLINT AUTO_INCREMENT PRIMARY KEY COMMENT 'ID юнита',
     title VARCHAR(100) NOT NULL COMMENT 'Заголовок юнита',
@@ -270,7 +255,6 @@ CREATE TABLE unit_dependencies (
     FOREIGN KEY (depends_on_unit_id) REFERENCES content_unit(unit_id)
 ) ENGINE=InnoDB COMMENT='Зависимости между юнитами контента';
 
--- 3. Лексико-семантический перевод (5НФ)
 CREATE TABLE translation_dictionary (
     term_key VARCHAR(100) PRIMARY KEY COMMENT 'Ключ термина',
     domain VARCHAR(50) COMMENT 'Предметная область',
@@ -307,7 +291,6 @@ CREATE TABLE student_translation_context (
     FOREIGN KEY (student_id) REFERENCES users(user_id)
 ) ENGINE=InnoDB COMMENT='Языковой и понятийный контекст перевода для студента';
 
--- 4. Поведение и активность (6НФ)
 CREATE TABLE student_activity_log (
     id BIGINT AUTO_INCREMENT PRIMARY KEY COMMENT 'ID действия',
     student_id SMALLINT NOT NULL COMMENT 'ID студента',
@@ -326,7 +309,6 @@ CREATE TABLE student_activity_metadata (
     FOREIGN KEY (log_id) REFERENCES student_activity_log(id)
 ) ENGINE=InnoDB COMMENT='Детализация действия студента по параметрам';
 
--- 5. Аудит (6НФ)
 CREATE TABLE grades_audit (
     audit_id BIGINT AUTO_INCREMENT PRIMARY KEY COMMENT 'ID аудита',
     student_id SMALLINT NOT NULL COMMENT 'Студент',
@@ -340,7 +322,6 @@ CREATE TABLE grades_audit (
     FOREIGN KEY (changed_by) REFERENCES users(user_id)
 ) ENGINE=InnoDB COMMENT='История изменений оценок';
 
--- 6. Feature Store (6НФ)
 CREATE TABLE student_feature_facts (
     student_id SMALLINT NOT NULL COMMENT 'Студент',
     feature_name VARCHAR(64) NOT NULL COMMENT 'Имя признака',
@@ -358,7 +339,6 @@ CREATE TABLE feature_definitions (
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP COMMENT 'Создан'
 ) ENGINE=InnoDB COMMENT='Метаданные признаков аналитики';
 
--- 7. Индивидуальная траектория (5НФ)
 CREATE TABLE student_learning_plan (
     student_id SMALLINT NOT NULL COMMENT 'Студент',
     unit_id SMALLINT NOT NULL COMMENT 'Контент-юнит',
@@ -371,7 +351,6 @@ CREATE TABLE student_learning_plan (
     FOREIGN KEY (skill_id) REFERENCES skills(skill_id)
 ) ENGINE=InnoDB COMMENT='План обучения студента с приоритетами';
 
--- 8. Достижения (геймификация)
 CREATE TABLE badge_achievements (
     achievement_id SMALLINT AUTO_INCREMENT PRIMARY KEY COMMENT 'ID достижения',
     student_id SMALLINT NOT NULL COMMENT 'Получивший студент',

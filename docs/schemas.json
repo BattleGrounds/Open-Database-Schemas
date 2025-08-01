@@ -1,0 +1,72 @@
+[
+  {
+    "name": "Learning Management System - Adaptive Learning Platform",
+    "version": "1.0.0",
+    "description": "Современная система управления обучением с поддержкой адаптивного обучения, персонализации и аналитики для онлайн-образовательных платформ",
+    "tags": ["LMS", "adaptive", "education", "microlearning", "analytics", "personalization"],
+    "created": "2025-05-14T09:30:00Z",
+    "updated": "2025-06-06T14:25:00Z",
+    "path": "../LearningManagementSystems/LMS-1.sql",
+    "features": {
+      "tables": {
+        "count": 32,
+        "names": [
+          "users", "courses", "tasks", "quizzes", "materials", "questions", 
+          "answers", "student_quiz", "grades", "skills", "content_unit", 
+          "student_profile", "student_activity_log", "student_feature_facts"
+        ]
+      },
+      "relationships": {
+        "count": 48,
+        "type": "1:N, M:N",
+        "complexity": "Высокая"
+      },
+      "normalization": "5НФ, 6НФ (микро-контент, лексико-семантический перевод, Feature Store)",
+      "indexes": "Более 40 индексов, включая полнотекстовые для поиска",
+      "constraints": "Полная система CHECK-ограничений и внешних ключей",
+      "size": 22545,
+      "keywords": [
+        "адаптивное обучение", 
+        "персонализация", 
+        "микрообучение", 
+        "аналитика", 
+        "геймификация"
+      ]
+    }
+  },
+  {
+    "name": "University Learning Management System - Academic Process",
+    "version": "2.0.1",
+    "description": "Полнофункциональная система управления учебным процессом для высших учебных заведений с поддержкой расписания, ведомостей и учебного плана",
+    "tags": ["LMS", "university", "academics", "schedule", "grades", "curriculum"],
+    "created": "2025-05-25T11:15:00Z",
+    "updated": "2025-05-26T09:45:00Z",
+    "path": "../LearningManagementSystems/LMS-2.sql",
+    "features": {
+      "tables": {
+        "count": 35,
+        "names": [
+          "Departments", "UserRoles", "Users", "StudyLevels", "Groups", 
+          "Disciplines", "TeachingAssignments", "Schedules", "Students", 
+          "GradeSheets", "FinalWorks", "Curriculum", "JournalSessions"
+        ]
+      },
+      "relationships": {
+        "count": 52,
+        "type": "1:N, M:N",
+        "complexity": "Очень высокая"
+      },
+      "normalization": "3НФ с дополнительной денормализацией для отчетов",
+      "indexes": "Более 60 индексов для оптимизации учебного процесса",
+      "constraints": "Сложные CHECK-ограничения и 3 триггера для целостности данных",
+      "size": 29426,
+      "keywords": [
+        "университет", 
+        "расписание", 
+        "учебный план", 
+        "ведомости", 
+        "итоговые работы"
+      ]
+    }
+  }
+]
