@@ -71,7 +71,7 @@ MIT License — free for personal or commercial use. Attribution appreciated.
 
 ## 📬 Author
 
-Developed and maintained by [@Roman](https://github.com/yourusername)  
+Developed and maintained by [@Roman](https://github.com/BattleGrounds)  
 I’m a student and database enthusiast who believes that **schema design is software architecture**.
 
 ---
