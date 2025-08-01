@@ -6,7 +6,7 @@
     "tags": ["LMS", "adaptive", "education", "microlearning", "analytics", "personalization"],
     "created": "2025-05-14T09:30:00Z",
     "updated": "2025-06-06T14:25:00Z",
-    "path": "../LearningManagementSystems/LMS-1.sql",
+    "path": "./LearningManagementSystems/LMS-1.sql",
     "features": {
       "tables": {
         "count": 32,
@@ -41,7 +41,7 @@
     "tags": ["LMS", "university", "academics", "schedule", "grades", "curriculum"],
     "created": "2025-05-25T11:15:00Z",
     "updated": "2025-05-26T09:45:00Z",
-    "path": "../LearningManagementSystems/LMS-2.sql",
+    "path": "./LearningManagementSystems/LMS-2.sql",
     "features": {
       "tables": {
         "count": 35,
