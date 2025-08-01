@@ -613,20 +613,19 @@
                 // Загружаем SQL-код
                 schemaCode.textContent = 'Загрузка SQL-кода...';
 
-                // Добавьте этот код для определения правильного базового пути
-                let basePath = '';
-                if (window.location.hostname.includes('github.io')) {
-                    // Для GitHub Pages получаем имя репозитория из URL
-                    const pathParts = window.location.pathname.split('/');
-                    if (pathParts.length > 1 && pathParts[1]) {
-                        basePath = '/' + pathParts[1];
+                // Получаем имя репозитория из URL
+                const repoName = window.location.pathname.split('/')[1] || '';
+                const userName = window.location.hostname.split('.')[0];
+
+                // Формируем URL для GitHub API
+                const fileName = schema.path.split('/').pop();
+                const apiUrl = `https://api.github.com/repos/${userName}/${repoName}/contents/LearningManagementSystems/${fileName}`;
+
+                fetch(apiUrl, {
+                    headers: {
+                        'Accept': 'application/vnd.github.v3.raw'
                     }
-                }
-
-                // Формируем правильный URL
-                const schemaPath = basePath + schema.path;
-
-                fetch(schemaPath)
+                })
                     .then(response => {
                         if (!response.ok) throw new Error('Network response was not ok');
                         return response.text();
@@ -635,32 +634,16 @@
                         schemaCode.textContent = text;
                         hljs.highlightElement(schemaCode);
 
-                        // Настраиваем кнопки
-                        downloadButton.href = schemaPath;
+                        // Для скачивания используем прямой URL к файлу
+                        const rawUrl = `https://raw.githubusercontent.com/${userName}/${repoName}/main/LearningManagementSystems/${fileName}`;
+                        downloadButton.href = rawUrl;
                         downloadButton.download = `${schema.name.replace(/\s+/g, '_')}.sql`;
                     })
                     .catch(error => {
                         console.error('Error loading SQL file:', error);
-
-                        // Попробуем альтернативный путь (на случай если репозиторий размещен в корне)
-                        const altPath = schema.path.replace(/^\//, '');
-                        fetch(altPath)
-                            .then(response => {
-                                if (response.ok) return response.text();
-                                throw new Error('Alternative path also failed');
-                            })
-                            .then(text => {
-                                schemaCode.textContent = text;
-                                hljs.highlightElement(schemaCode);
-
-                                downloadButton.href = altPath;
-                                downloadButton.download = `${schema.name.replace(/\s+/g, '_')}.sql`;
-                            })
-                            .catch(err => {
-                                schemaCode.textContent = 'Не удалось загрузить SQL-код. Проверьте доступность файла.\n\n' +
-                                    'Попробуйте открыть напрямую:\n' +
-                                    window.location.origin + schemaPath;
-                            });
+                        schemaCode.textContent = 'Не удалось загрузить SQL-код через API GitHub.\n\n' +
+                            'Ошибка: ' + error.message + '\n\n' +
+                            'Попробуйте проверить настройки репозитория.';
                     });
 
                 schemaModal.show();
