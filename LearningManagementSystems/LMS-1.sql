@@ -191,7 +191,7 @@ CREATE OR REPLACE TABLE `grades` (
 
 CREATE OR REPLACE TABLE `studentskills` (
     `student_id` SMALLINT  NOT NULL COMMENT 'Идентификатор студента',
-    `skill_id` SMALLINT  NOT NULL,
+    `skill_id` SMALLINT  NOT NULL COMMENT 'Идентификатор навыка',
     PRIMARY KEY (`student_id`, `skill_id`),
     FOREIGN KEY (`student_id`) REFERENCES `users` (`user_id`) ON DELETE CASCADE,
     FOREIGN KEY (`skill_id`) REFERENCES `skills` (`skill_id`) ON DELETE CASCADE
