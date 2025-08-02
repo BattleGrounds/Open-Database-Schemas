@@ -7,14 +7,12 @@
     "created": "2025-05-14T09:30:00Z",
     "updated": "2025-06-06T14:25:00Z",
     "path": "/LearningManagementSystems/LMS-1.sql",
+    "prisma": "model User {\n  id        Int      @id @default(autoincrement())\n  email     String   @unique\n  role      Role     @default(STUDENT)\n  profile   StudentProfile?\n}\n\nmodel Course {\n  id          Int          @id\n  title       String\n  units       ContentUnit[]\n}\n\nmodel ContentUnit {\n  id        Int     @id\n  type      UnitType\n  content   Json\n  courseId  Int\n  course    Course  @relation(fields: [courseId], references: [id])\n}\n\nenum Role {\n  STUDENT\n  TEACHER\n  ADMIN\n}\n\nenum UnitType {\n  VIDEO\n  QUIZ\n  ARTICLE\n  TASK\n}",
+    "erd": "erDiagram\n    User ||--o{ StudentProfile : \"1:1\"\n    User ||--o{ ActivityLog : \"1:N\"\n    User ||--o{ QuizAttempt : \"1:N\"\n    Course ||--o{ ContentUnit : \"1:N\"\n    ContentUnit ||--o{ Question : \"1:N\"\n    StudentProfile }o--o{ Skill : \"M:N via StudentSkill\"\n    Course }o--o{ User : \"M:N via Enrollment\"",
     "features": {
       "tables": {
         "count": 32,
-        "names": [
-          "users", "courses", "tasks", "quizzes", "materials", "questions", 
-          "answers", "student_quiz", "grades", "skills", "content_unit", 
-          "student_profile", "student_activity_log", "student_feature_facts"
-        ]
+        "names": ["users", "courses", "tasks", "quizzes", "materials", "questions", "answers", "student_quiz", "grades", "skills", "content_unit", "student_profile", "student_activity_log", "student_feature_facts"]
       },
       "relationships": {
         "count": 48,
@@ -25,13 +23,7 @@
       "indexes": "Более 40 индексов, включая полнотекстовые для поиска",
       "constraints": "Полная система CHECK-ограничений и внешних ключей",
       "size": 22545,
-      "keywords": [
-        "адаптивное обучение", 
-        "персонализация", 
-        "микрообучение", 
-        "аналитика", 
-        "геймификация"
-      ]
+      "keywords": ["адаптивное обучение", "персонализация", "микрообучение", "аналитика", "геймификация"]
     }
   },
   {
@@ -42,14 +34,12 @@
     "created": "2025-05-25T11:15:00Z",
     "updated": "2025-05-26T09:45:00Z",
     "path": "/LearningManagementSystems/LMS-2.sql",
+    "prisma": "model Department {\n  id        Int      @id\n  name      String\n  faculties Faculty[]\n}\n\nmodel Faculty {\n  id            Int           @id\n  name          String\n  departmentId  Int\n  department    Department    @relation(fields: [departmentId], references: [id])\n  groups        Group[]\n}\n\nmodel Group {\n  id          Int       @id\n  name        String\n  facultyId   Int\n  faculty     Faculty   @relation(fields: [facultyId], references: [id])\n  students    Student[]\n}\n\nmodel Student {\n  id        Int     @id\n  userId    Int\n  user      User    @relation(fields: [userId], references: [id])\n  groupId   Int\n  group     Group   @relation(fields: [groupId], references: [id])\n  grades    Grade[]\n}",
+    "erd": "erDiagram\n    Department ||--o{ Faculty : \"1:N\"\n    Faculty ||--o{ Group : \"1:N\"\n    Group ||--o{ Student : \"1:N\"\n    Student ||--o{ Grade : \"1:N\"\n    Student ||--o{ Attendance : \"1:N\"\n    Discipline ||--o{ Curriculum : \"1:N\"\n    Teacher }o--o{ TeachingAssignment : \"1:N\"\n    Schedule }o--o{ Group : \"M:N\"",
     "features": {
       "tables": {
         "count": 35,
-        "names": [
-          "Departments", "UserRoles", "Users", "StudyLevels", "Groups", 
-          "Disciplines", "TeachingAssignments", "Schedules", "Students", 
-          "GradeSheets", "FinalWorks", "Curriculum", "JournalSessions"
-        ]
+        "names": ["Departments", "UserRoles", "Users", "StudyLevels", "Groups", "Disciplines", "TeachingAssignments", "Schedules", "Students", "GradeSheets", "FinalWorks", "Curriculum", "JournalSessions"]
       },
       "relationships": {
         "count": 52,
@@ -60,13 +50,7 @@
       "indexes": "Более 60 индексов для оптимизации учебного процесса",
       "constraints": "Сложные CHECK-ограничения и 3 триггера для целостности данных",
       "size": 29426,
-      "keywords": [
-        "университет", 
-        "расписание", 
-        "учебный план", 
-        "ведомости", 
-        "итоговые работы"
-      ]
+      "keywords": ["университет", "расписание", "учебный план", "ведомости", "итоговые работы"]
     }
   }
 ]

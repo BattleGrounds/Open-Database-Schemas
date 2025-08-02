@@ -190,7 +190,7 @@ CREATE OR REPLACE TABLE `grades` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_uca1400_ai_ci;
 
 CREATE OR REPLACE TABLE `studentskills` (
-    `student_id` SMALLINT  NOT NULL,
+    `student_id` SMALLINT  NOT NULL COMMENT 'Идентификатор студента',
     `skill_id` SMALLINT  NOT NULL,
     PRIMARY KEY (`student_id`, `skill_id`),
     FOREIGN KEY (`student_id`) REFERENCES `users` (`user_id`) ON DELETE CASCADE,
