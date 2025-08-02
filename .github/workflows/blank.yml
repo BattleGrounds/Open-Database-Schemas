@@ -4,7 +4,7 @@ on:
   push:
     paths:
       - 'LearningManagementSystems/**/*.sql'
-      - '!**/*.prisma' # Не запускать, если меняется только .prisma
+      - '!**/*.prisma'  # Не запускать, если меняются только .prisma файлы
     branches:
       - main
       - master
@@ -15,6 +15,7 @@ jobs:
     permissions:
       contents: write
       pull-requests: write
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -30,70 +31,39 @@ jobs:
       - name: Install Prisma CLI
         run: npm install -g prisma
 
-      - name: Find SQL files
-        id: find_sql
+      - name: Process SQL files
         run: |
-          SQL_FILES=$(find LearningManagementSystems -name "*.sql" -type f)
-          if [ -z "$SQL_FILES" ]; then
-            echo "No SQL files found"
-            exit 1
-          fi
-          echo "files=$SQL_FILES" >> $GITHUB_OUTPUT
-
-      - name: Process each SQL file
-        run: |
-          while IFS= read -r sql_file; do
-            echo "Processing $sql_file"
-
-            # Определяем путь к Prisma-файлу
+          find LearningManagementSystems -name "*.sql" | while read sql_file; do
             prisma_file="${sql_file%.sql}.prisma"
-            temp_db="/tmp/$(basename ${sql_file%.sql}).db"
+            temp_db="/tmp/$(basename "${sql_file%.sql}").db"
 
-            # Создаём временную SQLite базу
+            echo "🔄 Processing $sql_file -> $prisma_file"
+
             sqlite3 "$temp_db" < "$sql_file"
 
-            # Если Prisma-файл ещё не существует — создаём новый schema.prisma
-            if [ ! -f "$prisma_file" ]; then
-              mkdir -p "$(dirname "$prisma_file")"
-              cat > "$prisma_file" << EOF
-// Auto-generated from $sql_file
-generator client {
-  provider = "prisma-client-js"
-}
+            mkdir -p "$(dirname "$prisma_file")"
 
-datasource db {
-  provider = "mysql"
-  url      = "file:$temp_db"
-}
+            printf 'generator client {\n  provider = "prisma-client-js"\n}\n\ndatasource db {\n  provider = "sqlite"\n  url      = "file:%s"\n}\n' "$temp_db" > "$prisma_file"
 
-// Models will be added below
-EOF
-            fi
+            prisma db pull --schema="$prisma_file" --force
+            prisma format --schema="$prisma_file"
 
-            # Интроспекция: получаем схему из SQL через SQLite
-            npx prisma db pull --schema="$prisma_file" --force
-
-            # Форматируем
-            npx prisma format --schema="$prisma_file"
-
-            echo "✅ Generated Prisma schema: $prisma_file"
-          done <<< "$(find LearningManagementSystems -name "*.sql" -type f)"
+            echo "✅ Generated $prisma_file"
+          done
 
       - name: Commit and Push Prisma files
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
 
-          # Добавляем все .prisma файлы
+          # Добавляем все новые/изменённые .prisma файлы
           git add **/*.prisma
 
-          # Проверяем, есть ли изменения
-          if git diff-index --quiet HEAD --; then
-            echo "✅ No changes to commit"
-            exit 0
+          # Проверяем, есть ли изменения для коммита
+          if ! git diff --cached --quiet; then
+            git commit -m "🤖 Auto-generate Prisma schema from SQL. Automatically generated via GitHub Actions when SQL schema was updated."
+            git push origin HEAD:${{ github.ref_name }}
+            echo "✅ Изменения закоммичены и отправлены в ${{ github.ref_name }}"
           else
-            git commit -m "🤖 Auto-generate Prisma schema from SQL
-            Generated via GitHub Actions when SQL was updated."
-            git push origin HEAD:main
-            echo "✅ Prisma schemas committed and pushed"
+            echo "ℹ️ Изменений нет — коммит не требуется"
           fi
